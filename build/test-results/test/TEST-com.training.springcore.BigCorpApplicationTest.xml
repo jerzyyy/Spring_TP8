@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.training.springcore.BigCorpApplicationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2019-06-05T09:29:46" hostname="DESKTOP-SIPK1V1" time="0.012">
+  <properties/>
+  <testcase name="run" classname="com.training.springcore.BigCorpApplicationTest" time="0.012"/>
+  <system-out><![CDATA[Application startup
+Site{id='siteA', name='Florange', captors=[Captor{id='fa6a81c2-b317-4523-807b-a19191af20db', name='Capteur A'}]}
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
