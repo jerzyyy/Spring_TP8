@@ -4,6 +4,7 @@ import com.training.springcore.model.Captor;
 import com.training.springcore.model.Measure;
 import com.training.springcore.model.MeasureStep;
 import com.training.springcore.service.measure.MeasureService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 @Service
 public class RealMeasureService implements MeasureService {
+    @Value("${bigcorp.measure.default-simulated}")
+    private Integer defaultValue;
     @Override
     public List<Measure> readMeasures(Captor captor, Instant start, Instant end,
                                       MeasureStep step) {

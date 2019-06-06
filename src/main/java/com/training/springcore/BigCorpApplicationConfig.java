@@ -1,20 +1,30 @@
 package com.training.springcore;
 
-import com.training.springcore.service.CaptorService;
-import com.training.springcore.service.CaptorServiceImpl;
-import com.training.springcore.service.SiteService;
-import com.training.springcore.service.SiteServiceImpl;
+import com.training.springcore.model.ApplicationInfo;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
+
+import java.util.Set;
 
 @ComponentScan
 @Configuration
+@EnableAspectJAutoProxy
+@PropertySource("classpath:application.properties")
 public class BigCorpApplicationConfig {
+    @Value("${bigcorp.name}")
+    private String name;
 
-    public SiteService serviceA() {
-        return new SiteServiceImpl(serviceB());
-    }
+    @Value("${bigcorp.version}")
+    private Integer version;
 
-    public CaptorService serviceB() {
-        return new CaptorServiceImpl();
+    @Value("${bigcorp.emails}")
+    private Set<String> emails;
+
+    @Value("${bigcorp.webSiteUrl}")
+    private String webSiteUrl;
+
+    @Bean
+    public ApplicationInfo applicationInfo() {
+        return new ApplicationInfo(name, version, emails, webSiteUrl);
     }
 }

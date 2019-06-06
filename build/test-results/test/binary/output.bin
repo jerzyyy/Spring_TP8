@@ -1,2 +1,5 @@
-Application startup
-rSite{id='siteA', name='Florange', captors=[Captor{id='fa6a81c2-b317-4523-807b-a19191af20db', name='Capteur A'}]}
+PInit SiteServiceImpl :com.training.springcore.service.SiteServiceImpl@7394f2b2
+<==========================================================
+7Application [BigCorp application (dev)] - version : 1
+/plus d'informations sur https://bigcorp.com 1
+<==========================================================

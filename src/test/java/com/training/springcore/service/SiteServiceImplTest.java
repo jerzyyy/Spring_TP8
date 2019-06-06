@@ -67,10 +67,7 @@ public class SiteServiceImplTest {
 
 
 
-    @Before
-    public void init(){
-        service = new FixedMeasureService();
-    }
+
     @Test
     public void readMeasuresThrowsExceptionWhenArgIsNull(){
         assertThatThrownBy(() -> service.readMeasures(null, start, end,

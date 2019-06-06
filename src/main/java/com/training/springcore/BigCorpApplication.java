@@ -1,5 +1,6 @@
 package com.training.springcore;
 
+import com.training.springcore.model.ApplicationInfo;
 import com.training.springcore.service.SiteService;
 import com.training.springcore.service.SiteServiceImpl;
 import org.springframework.context.ApplicationContext;
@@ -14,12 +15,15 @@ public class BigCorpApplication {
     }
 
     public void run(){
-        ApplicationContext context = new
-                AnnotationConfigApplicationContext(BigCorpApplicationConfig.class);
-        System.out.println("Application startup");
-        SiteService siteService = context.getBean(SiteService.class);
-        System.out.println(siteService.findById("siteA"));
-        SiteService siteService2 = context.getBean(SiteService.class);
-        System.out.println(siteService2.findById("siteA"));
+        ApplicationContext context =
+                new AnnotationConfigApplicationContext(BigCorpApplicationConfig.class);
+        ApplicationInfo applicationInfo = context.getBean(ApplicationInfo.class);
+        System.out.println("==========================================================");
+        System.out.println("Application [" + applicationInfo.getName() + "] - version : "
+                + applicationInfo.getVersion());
+        System.out.println("plus d'informations sur " + applicationInfo.getWebSiteUrl());
+        System.out.println("==========================================================");
+        SiteService service = context.getBean(SiteService.class);
+        service.findById("ok");
     }
 }

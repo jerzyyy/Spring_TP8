@@ -29,6 +29,7 @@ public class SiteServiceImpl implements SiteService {
 
 
     @Override
+    @Monitored
     public Site findById(String siteId) {
         System.out.println("Appel de findById :" + this);
         if (siteId == null) {
