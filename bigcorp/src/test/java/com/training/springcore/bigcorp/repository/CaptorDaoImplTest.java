@@ -12,6 +12,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
@@ -19,6 +21,7 @@ import javax.persistence.PersistenceException;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -32,31 +35,26 @@ public class CaptorDaoImplTest {
 
     @Autowired
     private EntityManager entityManager;
-
     @Test
     public void deleteByIdShouldThrowExceptionWhenIdIsUsedAsForeignKey() {
-        Captor captor = captorDao.findById("c1");
-        Assertions
-                .assertThatThrownBy(() -> {
+        Captor captor = captorDao.getOne("c1");
+        Assertions.assertThatThrownBy(() -> {
                     captorDao.delete(captor);
                     entityManager.flush();
                 })
                 .isExactlyInstanceOf(PersistenceException.class)
                 .hasCauseExactlyInstanceOf(ConstraintViolationException.class);
     }
-
     @Test
     public void findById() {
-        Captor captor = captorDao.findById("c1");
+        Captor captor = captorDao.getOne("c1");
         Assertions.assertThat(captor.getName()).isEqualTo("Eolienne");
     }
-
     @Test
     public void findByIdShouldReturnNullWhenIdUnknown() {
-        Captor captor = captorDao.findById("unknown");
+        Captor captor = captorDao.getOne("unknown");
         Assertions.assertThat(captor).isNull();
     }
-
     @Test
     public void findAll() {
         List<Captor> captors = captorDao.findAll();
@@ -66,37 +64,35 @@ public class CaptorDaoImplTest {
                 .contains(Tuple.tuple("c1", "Eolienne"))
                 .contains(Tuple.tuple("c2", "Laminoire à chaud"));
     }
-
     @Test
     public void create() {
         Assertions.assertThat(captorDao.findAll()).hasSize(2);
-        Captor captor = new Captor("New captor", siteDao.findById("site1"));
+        Captor captor = new Captor("New captor", siteDao.getOne("site1"));
         captor.setPowerSource(PowerSource.SIMULATED);
-        captorDao.persist(captor);
-
+        captorDao.save(captor);
         Assertions.assertThat(captorDao.findAll())
                 .hasSize(3)
                 .extracting(Captor::getName)
                 .contains("Eolienne", "Laminoire à chaud", "New captor");
     }
-
     @Test
     public void update() {
-        Captor captor = captorDao.findById("c1");
+        Captor captor = captorDao.getOne("c1");
         Assertions.assertThat(captor.getName()).isEqualTo("Eolienne");
         captor.setName("Captor updated");
-        captor = captorDao.findById("c1");
+        captor = captorDao.getOne("c1");
         Assertions.assertThat(captor.getName()).isEqualTo("Captor updated");
     }
-
     @Test
     public void deleteById() {
 
 
-        Captor newcaptor = new Captor("New captor", siteDao.findById("site1"));
-        captorDao.persist(newcaptor);
+        Captor newcaptor = new Captor("New captor", siteDao.getOne("site1"));
+        captorDao.save(newcaptor);
         Assertions.assertThat(captorDao.findById(newcaptor.getId())).isNotNull();
         captorDao.delete(newcaptor);
+
         Assertions.assertThat(captorDao.findById(newcaptor.getId())).isNull();
     }
+
 }
