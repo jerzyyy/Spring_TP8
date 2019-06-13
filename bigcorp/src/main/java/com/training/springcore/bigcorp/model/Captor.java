@@ -1,32 +1,71 @@
 package com.training.springcore.bigcorp.model;
 
+import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Captor {
+@Entity
+public class Captor<integer> {
     /**
      * Captor id
      */
+    @Id
     private String id = UUID.randomUUID().toString();
 
     /**
      * Captor name
      */
+    @Column(nullable = false)
     private String name;
+
+    @ManyToOne(optional = false)
     private Site site;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable=false)
+    private PowerSource powerSource;
+
+
+
+    private Integer defaultPowerInWatt;
+
+    public Captor(){
+
+    }
+    public Captor(String name, Site site) {
+        this.name = name;
+        this.site= site;
+    }
     @Deprecated
     public Captor(String name) {
         // Use for serializer or deserializer
     }
 
+    public PowerSource getPowerSource() {
+        return powerSource;
+    }
+
+    public void setPowerSource(PowerSource powerSource) {
+        this.powerSource = powerSource;
+    }
+
+
+
+    public Integer getDefaultPowerInWatt() {
+        return defaultPowerInWatt;
+    }
+
+    public void setDefaultPowerInWatt(Integer defaultPowerInWatt) {
+        this.defaultPowerInWatt = defaultPowerInWatt;
+    }
+
+
+
     /**
      * Constructor to use with required property
      * @param name
      */
-    public Captor(String name, Site site) {
-        this.name = name;
-        this.site= site;
-    }
+
 
     public String getId() {
         return id;

@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -15,26 +16,25 @@ import java.time.Instant;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
-@JdbcTest
-@ComponentScan("com.training.springcore.bigcorp")
+@DataJpaTest
+@ComponentScan
 public class MeasureDaoImplTest {
-
     @Autowired
     private MeasureDao measureDao;
-
 
 
     @Test
     public void findById() {
         Measure measure = measureDao.findById(-1L);
         Assertions.assertThat(measure.getId()).isEqualTo(-1L);
-        Assertions.assertThat(measure.getValueInWatt()).isEqualTo(1000000);
         Assertions.assertThat(measure.getInstant()).isEqualTo(Instant.parse("2018-08-09T11:00:00.000Z"));
-        Assertions.assertThat(measure.getCaptor().getId()).isEqualTo("c1");
+        Assertions.assertThat(measure.getValueInWatt()).isEqualTo(1_000_000);
+        Assertions.assertThat(measure.getCaptor().getName()).isEqualTo("Eolienne");
+        Assertions.assertThat(measure.getCaptor().getSite().getName()).isEqualTo("Bigcorp Lyon");
     }
     @Test
     public void findByIdShouldReturnNullWhenIdUnknown() {
-        Measure measure = measureDao.findById(-50L);
+        Measure measure = measureDao.findById(-1000L);
         Assertions.assertThat(measure).isNull();
     }
     @Test
@@ -44,25 +44,28 @@ public class MeasureDaoImplTest {
     }
     @Test
     public void create() {
-        Assertions.assertThat(measureDao.findAll()).hasSize(10);
         Captor captor = new Captor("Eolienne", new Site("site"));
         captor.setId("c1");
-        measureDao.create(new Measure(Instant.now(), 1000000,captor));
+        Assertions.assertThat(measureDao.findAll()).hasSize(10);
+        measureDao.persist(new Measure(Instant.now(), 2_333_666, captor));
         Assertions.assertThat(measureDao.findAll()).hasSize(11);
     }
     @Test
     public void update() {
         Measure measure = measureDao.findById(-1L);
-        Assertions.assertThat(measure.getValueInWatt()).isEqualTo(1000000);
-        measure.setValueInWatt(20000000);
-        measureDao.update(measure);
+        Assertions.assertThat(measure.getValueInWatt()).isEqualTo(1_000_000);
+        measure.setValueInWatt(2_333_666);
+
+
+
+        measureDao.persist(measure);
         measure = measureDao.findById(-1L);
-        Assertions.assertThat(measure.getValueInWatt()).isEqualTo(20000000);
+        Assertions.assertThat(measure.getValueInWatt()).isEqualTo(2_333_666);
     }
     @Test
     public void deleteById() {
         Assertions.assertThat(measureDao.findAll()).hasSize(10);
-        measureDao.deleteById(-1L);
+        measureDao.delete(measureDao.findById(-1L));
         Assertions.assertThat(measureDao.findAll()).hasSize(9);
     }
 }
