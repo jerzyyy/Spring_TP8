@@ -5,7 +5,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-public class Captor<integer> {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class Captor<integer> {
     /**
      * Captor id
      */
@@ -21,13 +22,6 @@ public class Captor<integer> {
     @ManyToOne(optional = false)
     private Site site;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable=false)
-    private PowerSource powerSource;
-
-
-
-    private Integer defaultPowerInWatt;
 
     public Captor(){
 
@@ -41,23 +35,6 @@ public class Captor<integer> {
         // Use for serializer or deserializer
     }
 
-    public PowerSource getPowerSource() {
-        return powerSource;
-    }
-
-    public void setPowerSource(PowerSource powerSource) {
-        this.powerSource = powerSource;
-    }
-
-
-
-    public Integer getDefaultPowerInWatt() {
-        return defaultPowerInWatt;
-    }
-
-    public void setDefaultPowerInWatt(Integer defaultPowerInWatt) {
-        this.defaultPowerInWatt = defaultPowerInWatt;
-    }
 
 
 

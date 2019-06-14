@@ -1,6 +1,7 @@
 package com.training.springcore.bigcorp.service;
 
 import com.training.springcore.bigcorp.model.Captor;
+import com.training.springcore.bigcorp.model.RealCaptor;
 import com.training.springcore.bigcorp.model.Site;
 import com.training.springcore.bigcorp.repository.CaptorDao;
 import org.assertj.core.api.Assertions;
@@ -37,7 +38,7 @@ public class CaptorServiceImplTest {
     public void findBySite() {
 // Initialisation
         String siteId = "siteId";
-        Captor expectedCaptor = new Captor("Capteur A", new Site("Florange"));
+        Captor expectedCaptor = new RealCaptor("Capteur A", new Site("Florange"));
         Mockito.when(captorDao.findBySiteId(siteId)).thenReturn(Arrays.asList(expectedCaptor))
         ;
 // Appel du SUT
